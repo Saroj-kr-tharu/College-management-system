@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+#root {
+  max-width: 1920px;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+html {
+  height: 100vh;
+  min-height: 100vh;
+}
