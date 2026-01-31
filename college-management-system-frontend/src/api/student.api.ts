@@ -38,9 +38,11 @@ export const getAllStudentsList = async () => {
 };
 
 // Get student by ID
-export const getStudentById = async (id:string) => {
+export const getStudentById = async (email: any) => {
     try {
-        const response = await api.get(`/student/${id}`);
+       
+        
+        const response = await api.get(`/student/${email}`);
         return response.data;
     } catch (error: any) {
         throw error.response.data;

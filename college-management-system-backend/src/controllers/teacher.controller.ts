@@ -142,9 +142,9 @@ export const getAllTeachersList = asyncHandler(
 // Get Teacher By ID
 export const getTeacherById = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.params;
+        const { email } = req.params;
 
-        const teacher = await Teacher.findById(id).populate('courses');
+        const teacher = await Teacher.findOne({email: email}).populate('courses');
 
         if (!teacher) {
             throw new CustomError('Teacher not found', 404);

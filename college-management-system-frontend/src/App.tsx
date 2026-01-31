@@ -51,6 +51,31 @@ function App() {
           <Route path = '/signup' element = { <Signup /> }/>
 
 
+          
+
+
+           <Route path='/' element= { <StudentDashboardLayout /> }>
+            <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
+            <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
+            {/* <Route path = '/profile' element = { <ProfilePage /> }/> */}
+
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
+          <Route path='/' element= { <TeacherDashboardLayout /> }>
+            <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
+            <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
+              <Route path='/student' element= { <StudentPage /> }/>
+            <Route path='/student/add' element= { <CreateStudent /> }/>
+            <Route path='/student/edit/:id' element= { <UpdateStudent /> }/>
+            <Route path='/student/view/:id' element={<StudentView />} />
+
+            <Route path = '/profile' element = { <ProfilePage /> }/>
+            <Route path='/attendance' element= { <AutoAttendance /> }/>
+
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
           <Route path='/' element= { <DashboardLayout /> }>
             <Route path = '/dashboard/admin' element = { <AdminDashboard /> }/>
             <Route path='/change-password' element= { <ChangePasswordPage /> }/>
@@ -84,29 +109,6 @@ function App() {
             {/* <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/> */}
 
             <Route path = '/profile' element = { <ProfilePage /> }/>
-
-            <Route path = '*' element = { <PageNotFound /> }/>
-          </Route>
-
-
-           <Route path='/' element= { <StudentDashboardLayout /> }>
-            <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
-            <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
-            {/* <Route path = '/profile' element = { <ProfilePage /> }/> */}
-
-            <Route path = '*' element = { <PageNotFound /> }/>
-          </Route>
-
-          <Route path='/' element= { <TeacherDashboardLayout /> }>
-            <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
-            <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
-              <Route path='/student' element= { <StudentPage /> }/>
-            <Route path='/student/add' element= { <CreateStudent /> }/>
-            <Route path='/student/edit/:id' element= { <UpdateStudent /> }/>
-            <Route path='/student/view/:id' element={<StudentView />} />
-
-            <Route path = '/profile' element = { <ProfilePage /> }/>
-            <Route path='/attendance' element= { <AutoAttendance /> }/>
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>

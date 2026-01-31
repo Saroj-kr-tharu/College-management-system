@@ -38,9 +38,9 @@ export const getAllTeachersList = async () => {
 };
 
 // Get teacher by ID
-export const getTeacherById = async (id:string) => {
+export const getTeacherById = async (email:any) => {
     try {
-        const response = await api.get(`/teacher/${id}`);
+        const response = await api.get(`/teacher/${email}`);
         return response.data;
     } catch (error: any) {
         throw error.response.data;

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import CustomError from '../middlewares/error-handler.middleware';
+import Attendance from '../models/attendance.model';
 import Student from '../models/student.model';
 import User from '../models/user.model';
 import { asyncHandler } from '../utils/async-handler.utils';
@@ -144,18 +145,20 @@ export const getAllStudentsList = asyncHandler(
 // Get Student By ID
 export const getStudentById = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.params;
-
-        const student = await Student.findById(id).populate('courses');
-
+        const { email } = req.params;
+        
+        // 1. studentId 
+        const student = await Student.findOne({email: email}).populate('courses').populate("classes");
         if (!student) {
             throw new CustomError('Student not found', 404);
         }
+        const attendInfo = await Attendance.findOne({student: student._id})
+        // console.log("student => ", student, " email ->  ", email)
 
         res.status(200).json({
             status: 'success',
             success: true,
-            data: student,
+            data: {student, attendInfo},
             message: 'Student fetched successfully'
         });
     }

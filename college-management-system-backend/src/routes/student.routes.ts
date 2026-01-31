@@ -24,7 +24,7 @@ router.get('/all', getAllStudentsList);
 router.get('/chart', getStudents);
 router.get('/class/:classId', getStudentsByClass);
 router.post('/filter', getAllStudentsFilter );
-router.get('/:id', getStudentById);
+router.get('/:email', getStudentById);
 router.put('/:id', authenticate(onlyAdmin), upload.single('profile'), updateStudent);
 router.delete('/:id', authenticate(onlyAdmin), deleteStudent);
 

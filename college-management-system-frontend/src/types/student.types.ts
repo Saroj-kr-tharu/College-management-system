@@ -34,3 +34,5 @@ export interface IStudentResponse extends IResponse {
     courses?: ICourseResponse[];
     profile: IImage;
 }
+
+
