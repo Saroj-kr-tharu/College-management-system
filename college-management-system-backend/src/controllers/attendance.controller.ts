@@ -8,7 +8,8 @@ import { getPagination } from '../utils/pagination.utils';
 export const createAttendance = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
         const payload = req.body;
-
+        console.log("req?.body ====> ", req?.body)
+ 
         const attendance = await Attendance.create(payload);
 
         res.status(201).json({

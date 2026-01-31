@@ -12,6 +12,7 @@ import { AttendanceStatus } from '../../types/enum';
 import type { IStudentResponse } from '../../types/student.types';
 
 const AutoAttendance = () => {
+  
   const [classes, setClasses] = useState<IClassResponse[]>([]);
   const [courses, setCourses] = useState<ICourseResponse[]>([]);
   const [students, setStudents] = useState<IStudentResponse[]>([]);

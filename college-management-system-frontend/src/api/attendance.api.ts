@@ -1,15 +1,7 @@
-import api from './';
 import type { IAttendanceData, IAttendanceResponse } from '../types/attendance.types';
+import api from './';
 
 // Create attendance
-// export const postAttendance = async (data: IAttendanceData) => {
-//     try {
-//         const response = await api.post('/attendance', data);
-//         return response.data;
-//     } catch (error: any) {
-//         throw error.response.data;
-//     }
-// };
 
 export const postAttendance = async (data: IAttendanceData) : Promise<IAttendanceResponse> => {
     try {

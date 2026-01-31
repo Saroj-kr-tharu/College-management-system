@@ -1,20 +1,20 @@
 import express from 'express';
 import {
     createAttendance,
-    getAllAttendance,
-    getAttendanceById,
-    updateAttendance,
     deleteAttendance,
-    getAttendanceByStudentId,
-    getAttendanceByCourseId,
+    getAllAttendance,
     getAttendanceByClassId,
+    getAttendanceByCourseId,
+    getAttendanceById,
+    getAttendanceByStudentId,
+    updateAttendance,
 } from '../controllers/attendance.controller';
-import { allAdminsTeachers } from '../types/global.types';
 import { authenticate } from '../middlewares/auth.middleware';
+import { allAdminsTeachers } from '../types/global.types';
 
 const router = express.Router();
 
-router.post('/', authenticate(allAdminsTeachers), createAttendance);
+router.post('/', createAttendance);
 router.get('/', getAllAttendance);
 router.get('/:id', getAttendanceById);
 router.put('/:id', authenticate(allAdminsTeachers), updateAttendance);
