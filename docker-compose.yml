@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Backend Service
+  backend:
+    image: sarojdockerworkspace/cms-backend:v1
+    build:
+      context: ./college-management-system-backend
+      dockerfile: Dockerfile
+    container_name: cms-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./college-management-system-backend/uploads:/backend/uploads
+    env_file:
+      - ./college-management-system-backend/.env
+  
+    networks:
+      - cms-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Service
+  frontend:
+    image: sarojdockerworkspace/cms-fortend:v1
+    build:
+      context: ./college-management-system-frontend
+      dockerfile: Dockerfile
+    container_name: cms-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+
+    env_file:
+      - ./college-management-system-frontend/.env
+  
+    depends_on:
+      - backend
+    networks:
+      - cms-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  cms-network:
+    driver: bridge
+
+volumes:
+  backend-uploads:
