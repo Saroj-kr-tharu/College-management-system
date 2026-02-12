@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-dep
+  namespace: cms-ns
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cms-backend
+  template:
+    metadata:
+      labels:
+        app: cms-backend
+    spec:
+      containers:
+      - name: cms-backend-container
+        image: sarojdockerworkspace/cms-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        envFrom:
+          - configMapRef:
+              name: cms-config
+          - secretRef:
+              name: cms-secrets
+        env:
+          - name: NODE_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: NODE_ENV
+
+          - name: FRONT_END_LOCAL_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: FRONT_END_LOCAL_URL
+
+          - name: FRONT_END_LIVE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: FRONT_END_LIVE_URL
+
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: PORT
+
+          - name: DATABASE_URI
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: DATABASE_URI
+
+          - name: JWT_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: JWT_SECRET
+
+          - name: JWT_EXPIRE_IN
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: JWT_EXPIRE_IN
+
+          - name: COOKIE_EXPIRY
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: COOKIE_EXPIRY
+
+          - name: CLOUDINARY_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: cms-secrets
+                key: CLOUDINARY_API_KEY
+
+          - name: CLOUDINARY_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: cms-secrets
+                key: CLOUDINARY_SECRET_KEY
+
+          - name: CLOUDINARY_CLOUD_NAME
+            valueFrom:
+              secretKeyRef:
+                name: cms-secrets
+                key: CLOUDINARY_CLOUD_NAME
+
+          - name: SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cms-secrets
+                key: SMTP_PASSWORD
+
+          - name: SMTP_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: SMTP_HOST
+
+          - name: SMTP_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: SMTP_PORT
+
+          - name: SMTP_SERVICE
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: SMTP_SERVICE
+
+          - name: SMTP_USER
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: SMTP_USER
+
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

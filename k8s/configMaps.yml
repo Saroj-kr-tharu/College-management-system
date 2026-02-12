@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cms-config
+  namespace: cms-ns
+data:
+  NODE_ENV : 'development'
+
+  FRONT_END_LOCAL_URL : 'http://cms-fortend-svc:80'
+  FRONT_END_LIVE_URL : 'http://64.227.169.144.nip.io'
+
+  PORT : '3000'
+  DATABASE_URI : 'mongodb+srv://amritshrestha1100:amritshresthaamrit@cluster0.4ujicx8.mongodb.net/college-management-system'
+
+
+  # JWT
+  JWT_SECRET : 'jhf74683h@4he'
+  JWT_EXPIRE_IN : '7d'
+  COOKIE_EXPIRY : '7'
+
+  SMTP_HOST : 'smtp.gmail.com'
+  SMTP_PORT : '465'
+  SMTP_SERVICE : 'gmail'
+  SMTP_USER : 'amritshrestha1100@gmail.com'
+
+  VITE_API_URL : 'http://64.227.169.144.nip.io/server/api'

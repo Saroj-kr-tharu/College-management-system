@@ -1,9 +1,9 @@
-version: '3.8'
+
 
 services:
   # Backend Service
   backend:
-    image: sarojdockerworkspace/cms-backend:v1
+    image: sarojdockerworkspace/cms-backend:latest
     build:
       context: ./college-management-system-backend
       dockerfile: Dockerfile
@@ -27,7 +27,7 @@ services:
 
   # Frontend Service
   frontend:
-    image: sarojdockerworkspace/cms-fortend:v1
+    image: sarojdockerworkspace/cms-fortend:latest
     build:
       context: ./college-management-system-frontend
       dockerfile: Dockerfile

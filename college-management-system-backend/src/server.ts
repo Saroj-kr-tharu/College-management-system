@@ -29,7 +29,7 @@ const allowed_origins = [
 // Connect DataBase
 connectDatabase(DATABASE_URI);
 
-// Use Middlewares
+
 // Use Middlewares
 app.use(cors({
     origin: (origin, callback) => {

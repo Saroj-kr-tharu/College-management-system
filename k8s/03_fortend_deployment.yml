@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fortend-dep
+  namespace: cms-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cms-fortend
+  template:
+    metadata:
+      labels:
+        app: cms-fortend
+    spec:
+      containers:
+      - name: cms-fortend-container
+        image: sarojdockerworkspace/cms-fortend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: cms-config
+        env:
+          - name: VITE_API_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cms-config
+                key: VITE_API_URL
+
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

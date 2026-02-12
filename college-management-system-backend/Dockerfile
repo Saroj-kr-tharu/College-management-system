@@ -16,7 +16,6 @@ COPY . .
 RUN npm run build
 
 
-
 #Stage 2: Production 
 FROM node:20-alpine AS runner 
 
@@ -30,8 +29,6 @@ RUN npm ci --only=production
 # Copy compiled JavaScript from builder
 COPY --from=builder /backend/build ./build
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
 
 EXPOSE 3000
 
