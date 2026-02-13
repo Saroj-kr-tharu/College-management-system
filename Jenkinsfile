@@ -33,12 +33,15 @@ pipeline{
                         sh "ls "
                         // cd  backend docker compose build and push 
                         sh "cd college-management-system-backend "
+                        sh "ls "
                         sh "docker build -t sarojdockerworkspace/cms-backend:latest ."
                         sh "docker push -t sarojdockerworkspace/cms-backend:latest"
                         // cd fortend , docker compose build and push 
 
                         sh "cd .. "
+                        sh "ls "
                         sh "cd college-management-system-frontend/ "
+                        sh "ls "
                         sh "docker build -t sarojdockerworkspace/cms-fortend:latest ."
                         sh "docker push -t sarojdockerworkspace/cms-fortend:latest"
 
