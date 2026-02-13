@@ -34,7 +34,7 @@ pipeline{
                         // cd  backend docker compose build and push 
                         sh ''' 
                           cd college-management-system-backend 
-                          ls
+                         
                           docker build -t sarojdockerworkspace/cms-backend:latest .
                           docker push  sarojdockerworkspace/cms-backend:latest
                           '''
@@ -45,7 +45,7 @@ pipeline{
                        
                         sh '''
                           cd college-management-system-frontend/
-                          ls 
+                          
                           docker build -t sarojdockerworkspace/cms-fortend:latest .
                           docker push  sarojdockerworkspace/cms-fortend:latest
                          '''
