@@ -29,12 +29,26 @@ pipeline{
                         usernameVariable:"dockerHubUser" )]
                     ){
                         sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+
+                        // cd  backend docker compose build and push 
+                        sh "cd college-management-system-backend "
+                        sh "docker build -t sarojdockerworkspace/cms-backend:latest ."
+                        sh "docker push -t sarojdockerworkspace/cms-backend:latest"
+                        // cd fortend , docker compose build and push 
+
+                        sh "cd .. "
+                        sh "cd college-management-system-frontend/ "
+                        sh "docker build -t sarojdockerworkspace/cms-fortend:latest ."
+                        sh "docker push -t sarojdockerworkspace/cms-fortend:latest"
+
                         
                      }
             } 
          }
         stage("k8s redeployed "){ steps{
              echo " k8s redeployed  "
+             sh "kubectl rollout restart deployment backend-dep -n cms-ns"
+             sh "kubectl rollout restart deployment fortend-dep -n cms-ns"
          } }
     }
 
