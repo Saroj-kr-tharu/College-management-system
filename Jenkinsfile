@@ -30,6 +30,7 @@ pipeline{
                     ){
                         sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
 
+                        sh "ls "
                         // cd  backend docker compose build and push 
                         sh "cd college-management-system-backend "
                         sh "docker build -t sarojdockerworkspace/cms-backend:latest ."
