@@ -63,7 +63,7 @@ app.use('/api/uploads', express.static('uploads/'));
 
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
-        message: `Server is running at localhost:${PORT} `
+        message: `Server is running at localhost:${PORT}  hellow bro mukunda don `
     });
 });
 
