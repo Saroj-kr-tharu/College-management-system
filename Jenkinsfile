@@ -152,7 +152,7 @@ pipeline{
             emailext(
                 mimeType: 'text/html',
                 attachmentsPattern: 'result.json',
-                from: 'sarojc11345@gmail.com',
+                from: 'sarojtestingkrtharu@gmail.com',
                 to: 'sarojc11345@gmail.com',
                 subject: "✅ Build Success – ${env.JOB_NAME} ",
                 body: """
@@ -228,7 +228,7 @@ pipeline{
             emailext(
                 mimeType: 'text/html',
                 attachmentsPattern: 'result.json',
-                from: 'sarojc11345@gmail.com',
+                from: 'sarojtestingkrtharu@gmail.com',
                 to: 'sarojc11345@gmail.com',
                 subject: '❌ Build Failed – Todo App',
                 body: """
