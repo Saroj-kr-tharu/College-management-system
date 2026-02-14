@@ -42,6 +42,26 @@ pipeline{
             }
         }
 
+        stage("OWASP Dependency Check"){
+            steps{
+                script {
+                    def dependencyCheckHome = tool 'OWASP Dependency-Check'
+                    sh """
+                        ${dependencyCheckHome}/bin/dependency-check.sh \
+                        --scan . \
+                        --format HTML \
+                        --format JSON \
+                        --format XML \
+                        --out dependency-check-report \
+                        --prettyPrint
+                    """
+                }
+                
+                // Publish the report
+                dependencyCheckPublisher pattern: 'dependency-check-report/dependency-check-report.xml'
+            }
+        }
+
 
         stage("scan file system"){ steps{ 
             sh 'trivy fs . -o result.json'
