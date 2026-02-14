@@ -18,7 +18,29 @@ pipeline{
            steps{
             git url : "https://github.com/Saroj-kr-tharu/College-management-system", branch :"main"
          } }
-
+        
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=cms \
+                            -Dsonar.sources=.
+                        """
+                    }
+                }
+            }
+        }
+        
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 
 
         stage("scan file system"){ steps{ 
@@ -28,15 +50,25 @@ pipeline{
         stage(" Build Docker Image "){ 
           steps{
              echo " Buildinig Docker Image  "
-              sh ''' 
-                    cd college-management-system-backend 
-                    docker build -t sarojdockerworkspace/cms-backend:latest .
-              '''
 
-              sh '''
-                    cd college-management-system-frontend/
-                    docker build -t sarojdockerworkspace/cms-fortend:latest .
-                  '''
+             withCredentials(  [usernamePassword(
+                        credentialsId: "dockerHubCreds",
+                        usernameVariable:"dockerHubUser" )]
+                    ){
+                        sh '''
+                          cd college-management-system-backend 
+                          docker build -t ${dockerHubUser}/cms-backend:latest .
+                        '''
+
+                        sh '''
+                          cd college-management-system-frontend/
+                          docker build -t ${dockerHubUser}/cms-fortend:latest .
+                        '''
+                       
+                     }
+          
+
+              
             } 
          }
 
@@ -49,15 +81,11 @@ pipeline{
                         passwordVariable:"dockerHubPass" ,
                         usernameVariable:"dockerHubUser" )]
                     ){
-                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-
-                        sh ''' 
-                          docker push  sarojdockerworkspace/cms-backend:latest
-                          '''
-
                         sh '''
-                          docker push  sarojdockerworkspace/cms-fortend:latest
-                         '''
+                          echo "${dockerHubPass}" | docker login -u "${dockerHubUser}" --password-stdin
+                          docker push ${dockerHubUser}/cms-backend:latest
+                          docker push ${dockerHubUser}/cms-fortend:latest
+                        '''
                        
                      }
             } 
