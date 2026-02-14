@@ -151,7 +151,7 @@ pipeline{
             def user = env.BUILD_USER ?: 'System / Webhook'
             emailext(
                 mimeType: 'text/html',
-                attachmentsPattern: 'result.json',
+                attachmentsPattern: 'result.json, backend-image-scan.json, frontend-image-scan.json, dependency-check-report/dependency-check-report.xml',
                 from: 'sarojtestingkrtharu@gmail.com',
                 to: 'sarojc11345@gmail.com',
                 subject: "✅ Build Success – ${env.JOB_NAME} ",
@@ -227,7 +227,7 @@ pipeline{
             def user = env.BUILD_USER ?: 'System / Webhook'
             emailext(
                 mimeType: 'text/html',
-                attachmentsPattern: 'result.json',
+                attachmentsPattern: 'result.json, backend-image-scan.json, frontend-image-scan.json, dependency-check-report/dependency-check-report.xml',
                 from: 'sarojtestingkrtharu@gmail.com',
                 to: 'sarojc11345@gmail.com',
                 subject: '❌ Build Failed – Todo App',
