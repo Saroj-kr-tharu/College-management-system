@@ -4,7 +4,13 @@ pipeline{
     stages{
 
         // 1. clone code 
-        // 2. trivy scan 
+        // 1.1 sonarqube
+        // 1.3 installing dependencies
+        // 1.4 owasp dependency check 
+        // 2. trivy file scan
+        // 2.1 building images 
+        // 2.2 push images 
+        // 2.3 docker image scan  
         // 4. restart deployed 
         
 
@@ -13,15 +19,30 @@ pipeline{
             git url : "https://github.com/Saroj-kr-tharu/College-management-system", branch :"main"
          } }
 
+
+
         stage("scan file system"){ steps{ 
             sh 'trivy fs . -o result.json'
          } }
 
-        
+        stage(" Build Docker Image "){ 
+          steps{
+             echo " Buildinig Docker Image  "
+              sh ''' 
+                    cd college-management-system-backend 
+                    docker build -t sarojdockerworkspace/cms-backend:latest .
+              '''
 
-        stage("docker build and push "){ 
+              sh '''
+                    cd college-management-system-frontend/
+                    docker build -t sarojdockerworkspace/cms-fortend:latest .
+                  '''
+            } 
+         }
+
+        stage("Image Push To DockerHub "){ 
             steps{
-                echo "Docker Push Images to docker hub "
+                echo "Image Pushing to DockerHub "
                 
                 withCredentials(  [usernamePassword(
                         credentialsId: "dockerHubCreds",
@@ -30,33 +51,21 @@ pipeline{
                     ){
                         sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
 
-                       
-                        // cd  backend docker compose build and push 
                         sh ''' 
-                          cd college-management-system-backend 
-                         
-                          docker build -t sarojdockerworkspace/cms-backend:latest .
                           docker push  sarojdockerworkspace/cms-backend:latest
                           '''
-                     
-                  
-                        // cd fortend , docker compose build and push 
 
-                       
                         sh '''
-                          cd college-management-system-frontend/
-                          
-                          docker build -t sarojdockerworkspace/cms-fortend:latest .
                           docker push  sarojdockerworkspace/cms-fortend:latest
                          '''
                        
-
-                        
                      }
             } 
          }
-        stage("k8s redeployed "){ steps{
-             echo " k8s redeployed  "
+
+        stage("k8s Deployment Restart"){ 
+          steps{
+             echo " k8s deploymnet restarting  "
              sh "kubectl rollout restart deployment backend-dep -n cms-ns"
              sh "kubectl rollout restart deployment fortend-dep -n cms-ns"
          } }
