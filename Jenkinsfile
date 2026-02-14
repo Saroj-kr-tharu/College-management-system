@@ -45,19 +45,22 @@ pipeline{
         stage("OWASP Dependency Check"){
           steps{
               script {
-                  // Create output directory first
+                 
                   sh 'mkdir -p dependency-check-report'
                   
                   def dependencyCheckHome = tool 'OWASP Dependency-Check'
-                  sh """
-                      ${dependencyCheckHome}/bin/dependency-check.sh \
-                      --scan . \
-                      --format HTML \
-                      --format JSON \
-                      --format XML \
-                      --out dependency-check-report \
-                      --prettyPrint
-                  """
+                  
+                 
+                  withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_API_KEY')]) {
+                      sh """
+                          ${dependencyCheckHome}/bin/dependency-check.sh \
+                          --scan . \
+                          --format XML \
+                          --out dependency-check-report \
+                          --prettyPrint \
+                          --nvdApiKey \${NVD_API_KEY}
+                      """
+                  }
               }
               
               // Publish the report
