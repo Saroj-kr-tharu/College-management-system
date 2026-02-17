@@ -14,7 +14,7 @@ const Login = () => {
       >
         {/* Heading */}
         <h1 className='text-4xl font-extrabold text-gray-900 text-center mb-6'>
-         Saroj Kumar tharu Welcome Back 
+         Ranjana DD  Welcome Back 
         </h1>
         <p className='text-center text-gray-600 mb-8'>
           Log in to continue to your account
