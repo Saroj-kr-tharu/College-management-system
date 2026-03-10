@@ -4,7 +4,8 @@ pipeline{
     stages{
 
         // 1. clone code 
-        // 1.1 sonarqube
+        // 1.1 sonarqube Analysis
+        // 1.2 sonarqube gate Anaylsis
         // 1.3 installing dependencies
         // 1.4 owasp dependency check 
         // 2. trivy file scan
