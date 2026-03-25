@@ -30,11 +30,6 @@ const LoginForm = () => {
     mutationFn: login,
     onSuccess: (response) => {
       toast.success(response?.message ?? 'Login Success');
-      console.log(" api data => ", response)
-
-      // if(response.isnewAdded == true ){
-      //   return " password change "
-      // }
 
       localStorage.setItem("token", response?.access_token)
     
@@ -64,7 +59,6 @@ const LoginForm = () => {
         }
     },
     onError: (error) => {
-      console.log(error);
       toast.error(error?.message ?? 'Login Failed');
     },
     mutationKey: ['login_mutation']

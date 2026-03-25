@@ -1,13 +1,17 @@
 import { Toaster } from 'react-hot-toast'
 import { Route, BrowserRouter as Router, Routes } from 'react-router'
 import './App.css'
-import DashboardLayout from './layouts/dashboard.layout'
-import StudentDashboardLayout from './layouts/student.dashboard.layout'
-import TeacherDashboardLayout from './layouts/teacher.dashboard.layout'
 import Login from './pages/auth/login'
 import Signup from './pages/auth/signup'
 import AdminDashboard from './pages/dashboard/admin-dashboard'
 import StudentDashboard from './pages/dashboard/student.dashboard'
+import TeacherDashboard from './pages/dashboard/teacher.dashboard'
+import DashboardLayout from './layouts/dashboard.layout'
+import LoginDashboardLayout from './layouts/login.dashboard.layout'
+import ATDashboardLayout from './layouts/teacher.admin.dashboard.layout'
+import STDashboardLayout from './layouts/teacher.student.dashboard.layout'
+import StudentDashboardLayout from './layouts/student.dashboard.layout'
+import TeacherDashboardLayout from './layouts/teacher.dashboard.layout'
 
 import ChangePasswordPage from './pages/changePassword/changePasswordPage'
 
@@ -36,8 +40,13 @@ import AutoAttendance from './pages/attendance/AutoAttendance'
 
 import ProfilePage from './pages/profilepage'
 
-import TeacherDashboard from './pages/dashboard/teacher.dashboard'
 import PageNotFound from './pages/page-not.found'
+import ReportGenerate from './pages/report/report.generate'
+import ForgotPassword from './pages/auth/forgot-password'
+import StudentResultPage from './pages/result/StudentResultPage'
+// import TeacherResultPage from './pages/result/TeacherResultPage'
+import ATResultPage from './pages/result/ATResultPage'
+import ClassReportPage from './pages/result/ClassReportPage'
 
 function App() {
 
@@ -49,33 +58,45 @@ function App() {
 
           <Route path = '/login' element = { <Login /> }/>
           <Route path = '/signup' element = { <Signup /> }/>
+          <Route path = '/forgot-password' element = { <ForgotPassword /> }/>
 
+          // Shared Admin, Student and Teacher
+          <Route path='/' element= { <LoginDashboardLayout /> }> 
 
-          
-
-
-           <Route path='/' element= { <StudentDashboardLayout /> }>
-            <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
-            <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
-            {/* <Route path = '/profile' element = { <ProfilePage /> }/> */}
-
-            <Route path = '*' element = { <PageNotFound /> }/>
-          </Route>
-
-          <Route path='/' element= { <TeacherDashboardLayout /> }>
-            <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
-            <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
-              <Route path='/student' element= { <StudentPage /> }/>
-            <Route path='/student/add' element= { <CreateStudent /> }/>
-            <Route path='/student/edit/:id' element= { <UpdateStudent /> }/>
-            <Route path='/student/view/:id' element={<StudentView />} />
+            <Route path='/change-password' element= { <ChangePasswordPage /> }/>
 
             <Route path = '/profile' element = { <ProfilePage /> }/>
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
+          // Shared StudentDashboard and Teacher
+          <Route path='/' element= { <STDashboardLayout /> }> 
+            <Route path='/report' element= { <ReportGenerate /> }/>
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
+          // Shared Admin, Teacher
+          <Route path='/' element= { <ATDashboardLayout /> }> 
+
+             {/* Student */}
+            <Route path='/student' element= { <StudentPage /> }/>
+
+            {/* Course */}
+            <Route path='/course' element= { <CoursePage /> }/>
+
+            {/* Class */}
+            <Route path='/class' element= { <ClassPage /> }/>
+
+            {/* Attendance */}
             <Route path='/attendance' element= { <AutoAttendance /> }/>
+
+            <Route path="/result" element={<ATResultPage />} />
+            <Route path="/class-report" element={<ClassReportPage />} />
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
 
+          // Admin 
           <Route path='/' element= { <DashboardLayout /> }>
             <Route path = '/dashboard/admin' element = { <AdminDashboard /> }/>
             <Route path='/change-password' element= { <ChangePasswordPage /> }/>
@@ -108,13 +129,28 @@ function App() {
             {/* <Route path='/attendance/add' element= { <CreateAttendance /> }/> */}
             {/* <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/> */}
 
-            <Route path = '/profile' element = { <ProfilePage /> }/>
+            {/* <Route path="/result" element={<ResultPage /> }/> */}
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
-          
 
-          
+          // Student
+          <Route path='/' element= { <StudentDashboardLayout /> }>
+            <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
+            <Route path = '/result/student' element = { <StudentResultPage /> }/>
+
+            <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
+          // Teacher
+          <Route path='/' element= { <TeacherDashboardLayout /> }>
+            <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
+            {/* <Route path = '/result/teacher' element = { <TeacherResultPage /> }/> */}
+
+            <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
 
         </Routes>
       </Router>

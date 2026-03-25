@@ -1,20 +1,22 @@
-import express from 'express';
+import express from "express";
 import {
-    changePassword,
-    changeRole,
-    getCurrentUser,
-    login,
-    logout,
-    register
-} from '../controllers/auth.controller';
+  changePassword,
+  changeRole,
+  forgotPassword,
+  getCurrentUser,
+  login,
+  logout,
+  register,
+} from "../controllers/auth.controller";
 
 const router = express.Router();
 
-router.post('/signup', register);
-router.post('/login', login);
-router.get('/me',  getCurrentUser);
-router.post('/change-password', changePassword);
-router.post('/logout', logout);
-router.patch('/changeRole', changeRole);
+router.post("/signup", register);
+router.post("/login", login);
+router.get("/me", getCurrentUser);
+router.post("/change-password", changePassword);
+router.post("/logout", logout);
+router.post("/forgot-password", forgotPassword);
+router.patch("/changeRole", changeRole);
 
 export default router;

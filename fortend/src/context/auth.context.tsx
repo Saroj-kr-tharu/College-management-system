@@ -28,10 +28,8 @@ const AuthProvider: React.FC<{ children:React.ReactNode }> = ({ children }) => {
         async function fetchUser(){
         try {
             const currentUser = await getCurrentUser()
-            console.log(" data from auth => ",  currentUser.data)
             setUser(currentUser.data)
         } catch (error) {
-            console.log(error)
             setUser(null)
         } finally {
             setIsLoading(false)

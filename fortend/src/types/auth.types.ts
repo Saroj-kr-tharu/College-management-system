@@ -18,10 +18,15 @@ export interface ISignupData {
     phone_number?: string;
 }
 
+export interface IForgotPassword {
+    email: string;
+}
+
 export interface IUser extends IResponse {
     fullName: string;
     email: string;
     role: Role;
     password: string;
     phone_number?: string;
+    isnewAdded?: boolean;
 }

@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { HiX } from 'react-icons/hi';
 import DropdownItem from './dropdownitem';
 import SidebarItem from './sidebaritem';
 import { sidebarLinks } from './links';
 import { useLocation } from 'react-router';
-
+import { useAuth } from '../../context/auth.context';
+import { filterSidebarByRole } from './sidebar.utils';
 
 interface SideMenuProps {
   isOpen?: boolean;
@@ -14,8 +15,14 @@ interface SideMenuProps {
 const SideMenu: React.FC<SideMenuProps> = ({ isOpen = false, toggleSidebar }) => {
   const location = useLocation();
   const activePath = location.pathname;
+  const { user } = useAuth(); // Add this line
 
-  // Track open dropdowns dynamically
+  // Add this filter logic
+  const filteredLinks = useMemo(() => {
+    if (!user?.role) return [];
+    return filterSidebarByRole(sidebarLinks, user.role);
+  }, [user?.role]);
+
   const [openDropdowns, setOpenDropdowns] = useState<{ [key: string]: boolean }>({});
 
   const toggleDropdown = (label: string) => {
@@ -52,7 +59,8 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen = false, toggleSidebar }) =>
 
         {/* Navigation */}
         <nav className='flex-1 overflow-y-auto px-2 py-4 space-y-2'>
-          {sidebarLinks.map((link) =>
+          {/* Change sidebarLinks to filteredLinks */}
+          {filteredLinks.map((link) =>
             link.subLinks ? (
               <DropdownItem
                 key={link.label}
@@ -74,13 +82,12 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen = false, toggleSidebar }) =>
         </nav>
 
         {/* Sidebar Footer */}
-          <div className='mt-auto flex flex-col items-center py-4'>
-            <hr className='w-full border-gray-300 mb-4' />
-            <span className='text-gray-950 text-sm'>
-              &copy; 2025 CollegeMS
-            </span>
-          </div>
-
+        <div className='mt-auto flex flex-col items-center py-4'>
+          <hr className='w-full border-gray-300 mb-4' />
+          <span className='text-gray-950 text-sm'>
+            &copy; 2026 CollegeMS
+          </span>
+        </div>
       </aside>
     </>
   );

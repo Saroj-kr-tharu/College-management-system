@@ -14,7 +14,7 @@ const Login = () => {
       >
         {/* Heading */}
         <h1 className='text-4xl font-extrabold text-gray-900 text-center mb-6'>
-         Ranjana DD  Welcome Back 
+          Welcome Back
         </h1>
         <p className='text-center text-gray-600 mb-8'>
           Log in to continue to your account
@@ -22,6 +22,16 @@ const Login = () => {
 
         {/* LogIn Form */}
         <LoginForm />
+
+        {/* Forgot Password */}
+        <div className='mt-4 text-right'>
+          <Link
+            to='/forgot-password'
+            className='text-sm text-violet-600 hover:text-violet-800 font-medium hover:underline transition-colors duration-200'
+          >
+            Forgot Password?
+          </Link>
+        </div>
 
         {/* Divider */}
         <div className='my-6 flex items-center'>

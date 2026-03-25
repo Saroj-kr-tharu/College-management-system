@@ -1,22 +1,26 @@
-import express from 'express';
+import express from "express";
 import {
-    createClass,
-    getAllClasses,
-    getAllClassesList,
-    getClassById,
-    updateClass,
-    deleteClass
-} from '../controllers/class.controller';
-import { allAdminsTeachers } from '../types/global.types';
-import { authenticate } from '../middlewares/auth.middleware';
+  createClass,
+  deleteClass,
+  getAllClasses,
+  getAllClassesList,
+  getAllStuClass,
+  getClassById,
+  getTeaClass,
+  updateClass
+} from "../controllers/class.controller";
+import { authenticate } from "../middlewares/auth.middleware";
+import { onlyAdmin } from "../types/global.types";
 
 const router = express.Router();
 
-router.post('/', authenticate(allAdminsTeachers), createClass);
-router.get('/', getAllClasses);
-router.get('/all', getAllClassesList);
-router.get('/:id', getClassById);
-router.put('/:id', authenticate(allAdminsTeachers), updateClass);
-router.delete('/:id', authenticate(allAdminsTeachers), deleteClass);
+router.post("/", authenticate(onlyAdmin), createClass);
+router.get("/getStuClass/:className", getAllStuClass);
+router.get("/getTeaClass/:className", getTeaClass);
+router.get("/", getAllClasses);
+router.get("/all", getAllClassesList);
+router.get("/:id", getClassById);
+router.put("/:id", authenticate(onlyAdmin), updateClass);
+router.delete("/:id", authenticate(onlyAdmin), deleteClass);
 
 export default router;

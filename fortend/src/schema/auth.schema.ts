@@ -11,3 +11,7 @@ export const SignupSchema = yup.object ({
     password: yup.string().required('Password is required'),
     phone: yup.string().optional()
 })
+
+export const ForgotPasswordSchema = yup.object({
+    email: yup.string().required('Email is required').email('Invalid email format'),
+})

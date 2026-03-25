@@ -1,12 +1,10 @@
-import { IJWTPayload } from './global.types';
+import { IJWTPayload } from "./global.types";
 
 declare global {
-    namespace Express {
-        interface Request {
-            user: IJWTPayload;
-        }
+  namespace Express {
+    interface Request {
+      user: IJWTPayload;
     }
+  }
 }
-
-
-export { };
+export {};

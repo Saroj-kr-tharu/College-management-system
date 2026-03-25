@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getStudentById } from '../../api/student.api';
 import StudentForm from '../../components/student/form';
-import { useParams, useSearchParams } from 'react-router';
+import { useParams } from 'react-router';
 import PageHeader from '../../components/header/page-header';
 
 const UpdateStudent = () => {
@@ -10,8 +10,6 @@ const UpdateStudent = () => {
   const [showLoader, setShowLoader] = useState(true);
 
   const { id } = useParams()
-  const search = useSearchParams()
-  console.log(id, search[0].get('name'))
 
   const { isLoading, data } = useQuery({
       queryFn: () => { return getStudentById(id || '') },
@@ -40,8 +38,6 @@ const UpdateStudent = () => {
       </div>
     );
   }
-
-  console.log(isLoading, data?.data)
 
   return (
     <main className='min-h-screen w-full p-0'>

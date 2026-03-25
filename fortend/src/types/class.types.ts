@@ -10,7 +10,7 @@ export interface IClassData {
     semester: number;
     students?: string[];
     courses?: string[];
-    teacher?: string;
+    teachers?: string[];
 }
 
 export interface IClassResponse extends IResponse {
@@ -19,5 +19,5 @@ export interface IClassResponse extends IResponse {
     semester: number;
     students?: IStudentResponse[];
     courses?: ICourseResponse[];
-    teacher?: ITeacherResponse;
+    teachers?: ITeacherResponse[];
 }

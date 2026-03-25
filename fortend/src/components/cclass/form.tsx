@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import Button from '../common/button';
 import Input from '../common/inputs/input';
@@ -6,12 +7,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SelectInput from '../common/inputs/select.input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ClassSchema } from '../../schema/class.schema';
-import { getAllCoursesList } from '../../api/course.api';
-import { getAllStudentsList } from '../../api/student.api';
-import { getAllTeachersList } from '../../api/teacher.api';
+import { getCoursesByProgramSemester } from '../../api/course.api';
 import { postClass, updateClass } from '../../api/class.api';
 import type { IClassData, IClassResponse } from '../../types/class.types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { PROGRAMS, SEMESTER_OPTIONS } from '../../types/enum';
 
 interface IProps {
     data?: IClassResponse
@@ -27,14 +27,6 @@ const ClassForm: React.FC<IProps> = ({ data: classData }) => {
             name: classData?.name || '',
             program: classData?.program || '',
             semester: classData?.semester || 1,
-            teacher: typeof classData?.teacher === 'string' 
-                ? classData.teacher 
-                : classData?.teacher?._id || '',
-            students: classData?.students
-                ? classData.students.map(student =>
-                    typeof student === 'string' ? student : student._id
-                  )
-                : [],
             courses: classData?.courses
                 ? classData.courses.map(course =>
                     typeof course === 'string' ? course : course._id
@@ -45,23 +37,24 @@ const ClassForm: React.FC<IProps> = ({ data: classData }) => {
         mode: 'all'
     })
 
-    // Query for teacher
-    const { data: teacher, isLoading: teacherLoading } = useQuery({
-        queryFn: getAllTeachersList, // your API function
-        queryKey: ['teacher']
+    const selectedProgram = methods.watch('program')
+    const selectedSemester = methods.watch('semester')
+
+    // Auto-fetch courses by program and semester
+    const { data: autoCoursesData, isLoading: autoCoursesLoading } = useQuery({
+        queryFn: () => getCoursesByProgramSemester(String(selectedProgram), Number(selectedSemester)),
+        queryKey: ['courses-by-program-semester', selectedProgram, selectedSemester],
+        enabled: !!selectedProgram && !!selectedSemester && Number(selectedSemester) > 0,
     })
 
-    // Query for students
-    const { data: students, isLoading: studentsLoading } = useQuery({
-        queryFn: getAllStudentsList, // your API function
-        queryKey: ['students'],
-    });
-
-    // Query for courses
-    const { data: courses, isLoading: coursesLoading } = useQuery({
-        queryFn: getAllCoursesList, // your API function
-        queryKey: ['courses'],
-    });
+    useEffect(() => {
+        if (autoCoursesData?.data && autoCoursesData.data.length > 0) {
+            const courseIds = autoCoursesData.data.map((c: { _id: string }) => c._id)
+            methods.setValue('courses', courseIds)
+        } else if (selectedProgram && selectedSemester) {
+            methods.setValue('courses', [])
+        }
+    }, [autoCoursesData, selectedProgram, selectedSemester])
 
     // Add Mutation
     const { mutate, isPending } = useMutation({
@@ -113,65 +106,60 @@ const ClassForm: React.FC<IProps> = ({ data: classData }) => {
                         placeholder='Enter class name'
                         required
                     />
-                    <Input
-                        id='program'
+                    <SelectInput
                         name='program'
+                        id='program'
                         label='Program'
-                        placeholder='Enter program'
+                        placeholder='Select program'
+                        options={PROGRAMS}
                         required
                     />
-                    <Input
-                        id='semester'
+                    <SelectInput
                         name='semester'
+                        id='semester'
                         label='Semester'
-                        type='number'
-                        placeholder='Enter semester'
+                        placeholder='Select semester'
+                        options={SEMESTER_OPTIONS}
                         required
                     />
-                    {/* Teacher */}
-                    <SelectInput
-                        id='teacher'
-                        name='teacher'
-                        label='Teacher'
-                        placeholder={teacherLoading ? 'Loading teacher...' : 'Select teacher'}
-                        options={(teacher?.data || []).map((b: any) => ({
-                            label: b.fullName,
-                            value: b._id,
-                        }))}
-                        required
-                    />
-                    {/* Courses */}
-                    <SelectInput
-                        name="students"
-                        id="students"
-                        label="Students"
-                        placeholder={studentsLoading ? 'Loading students...' : 'Select students'}
-                        options={(students?.data || []).map((c: any) => ({
-                            label: c.fullName,
-                            value: c._id,
-                        }))}
-                        multiple
-                        required
-                    />
-                    {/* Courses */}
-                    <SelectInput
-                        name="courses"
-                        id="courses"
-                        label="Courses"
-                        placeholder={coursesLoading ? 'Loading courses...' : 'Select courses'}
-                        options={(courses?.data || []).map((c: any) => ({
-                            label: c.name,
-                            value: c._id,
-                        }))}
-                        multiple
-                        required
-                    />
+                    {/* Courses - Auto-assigned by program & semester */}
+                    <div className='w-full'>
+                        <div className='flex items-center gap-2 mb-1'>
+                            <label className='text-sm sm:text-base md:text-base text-gray-700 font-medium'>
+                                Courses
+                            </label>
+                            <span className='text-xs text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded-full'>
+                                Auto-assigned
+                            </span>
+                        </div>
+                        {autoCoursesLoading ? (
+                            <div className='p-3 bg-gray-50 border border-gray-200 rounded-md'>
+                                <p className='text-sm text-gray-500 animate-pulse'>Loading courses...</p>
+                            </div>
+                        ) : autoCoursesData?.data && autoCoursesData.data.length > 0 ? (
+                            <div className='flex flex-wrap gap-2 p-3 bg-blue-50/50 border border-blue-200 rounded-md'>
+                                {autoCoursesData.data.map((c: { _id: string; name: string; code: string }) => (
+                                    <span key={c._id} className='px-3 py-1.5 bg-white text-blue-700 rounded-lg text-sm font-medium shadow-sm border border-blue-100'>
+                                        {c.name} ({c.code})
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className='p-3 bg-gray-50 border border-gray-200 rounded-md'>
+                                <p className='text-sm text-gray-400'>
+                                    {selectedProgram && Number(selectedSemester) > 0
+                                        ? 'No courses found for selected program and semester'
+                                        : 'Select program and semester to auto-assign courses'}
+                                </p>
+                            </div>
+                        )}
+                    </div>
 
                 </div>
                 <div>
                     <Button
-                        label= {isPending || updating ? 'Submitting...' : 'Submit'}
-                        type= 'submit'
+                        label={isPending || updating ? 'Submitting...' : 'Submit'}
+                        type='submit'
                         isPending={isPending || updating}
                     />
                 </div>

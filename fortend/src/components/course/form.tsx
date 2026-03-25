@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 import Button from '../common/button';
 import Input from '../common/inputs/input';
+import SelectInput from '../common/inputs/select.input';
 import { useNavigate } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -8,6 +9,14 @@ import { CourseSchema } from '../../schema/course.schema';
 import { postCourse, updateCourse } from '../../api/course.api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ICourseData, ICourseResponse } from '../../types/course.types';
+import { PROGRAMS, SEMESTER_OPTIONS } from '../../types/enum';
+
+const DEPARTMENTS = [
+    { label: 'Information Technology Engineering', value: 'IT' },
+    { label: 'Computer Engineering', value: 'CMP' },
+    { label: 'Civil Engineering', value: 'CIVIL' },
+    { label: 'Computer Science', value: 'BCA' },
+];
 
 interface IProps {
     data?: ICourseResponse
@@ -95,26 +104,28 @@ const CourseForm: React.FC<IProps> = ({ data: course }) => {
                         placeholder='Enter credit hours'
                         required
                     />
-                    <Input
-                        id='department'
+                    <SelectInput
                         name='department'
+                        id='department'
                         label='Department'
-                        placeholder='Enter department'
+                        placeholder='Select department'
+                        options={DEPARTMENTS}
                         required
                     />
-                    <Input
-                        id='semester'
+                    <SelectInput
                         name='semester'
+                        id='semester'
                         label='Semester'
-                        type='number'
-                        placeholder='Enter semester'
+                        placeholder='Select semester'
+                        options={SEMESTER_OPTIONS}
                         required
                     />
-                    <Input
-                        id='program'
+                    <SelectInput
                         name='program'
+                        id='program'
                         label='Program'
-                        placeholder='Enter program'
+                        placeholder='Select program'
+                        options={PROGRAMS}
                         required
                     />
 
